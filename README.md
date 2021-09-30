@@ -1,7 +1,7 @@
 # XYAxis
 simple tool to paint axis x and y
 > this tool 👇
-![image](Screenshot_٢٠٢١١٠٠١-٠٠٥٣٢٢~2.png)
+![image about tool](Screenshot_٢٠٢١١٠٠١-٠٠٥٣٢٢~2.png)
 
 
 Install:
@@ -18,4 +18,4 @@ python XYAxis -2 3 s//2-5
 ```
 
 > ```python XYAxis -8 9 s//7+s-s//3```
-[image](Screenshot_٢٠٢١١٠٠١-٠١٠٥٥٠~2.png)
+![image for use tool](Screenshot_٢٠٢١١٠٠١-٠١٠٥٥٠~2.png)
