@@ -1,7 +1,7 @@
 # XYAxis
 simple tool to paint axis x and y
 > this tool 👇
-![image](Screenshot_٢٠٢١١٠٠١-٠٠٤١٣٧~2.png)
+![image](Screenshot_٢٠٢١١٠٠١-٠٠٥٣٢٢~2.png)
 
 
 Install:
