@@ -7,6 +7,7 @@ simple tool to paint axis x and y
 Install:
 ```
 git clone https://github.com/G705-Ghilan/XYAxis
+pip install rich
 python XYAxis -2 3 s**3
 ```
 
