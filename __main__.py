@@ -32,7 +32,7 @@ class XYPaint:
         return text + tap*(max - len(text))
 
     @property
-    def paint_x(self):
+    def paint_x(self) -> str:
         temp = list(self.line_rang)
         temp[len(temp)//2] = C[0]
         line_1 = f'≺{C[-2]*2}{(self.center(C[-1], self.max, C[-2]) + C[-2])*(len(temp))}{C[-2]*2}≻'
@@ -40,12 +40,12 @@ class XYPaint:
         return f'{line_1}\n{line_2}'
 
     @property
-    def paint_y(self):
-        end = ' '*(self.max+1)
+    def paint_y(self) -> tuple:
+        end = ' '*(self.max + 1)
         data = ['', '']
         t = 0
         for i in self.line_rang[::-1]:
-            data[t] += (f"{' '*(self.max-len(str(i)))}{i}{C[-1]}" if i < 0 else f"{C[-1]}{i}{' '*(self.max-1-len(str(i)))}") + '\n'
+            data[t] += (f"{' '*(self.max - len(str(i)))}{i}{C[-1]}" if i < 0 else f"{C[-1]}{i}{' '*(self.max - 1 - len(str(i)))}") + '\n'
             t += 1 if  i == 0 else 0 # ⋎][⋏
             
         return (
@@ -53,7 +53,8 @@ class XYPaint:
             data[1]
         )
 
-    def filter_controls(self, mode: int):
+    # (..., ...)
+    def filter_controls(self, mode: int) -> list:
         data = []
         num = list(self.line_rang[self.line_rang.index(0):])[::-1]
         plus = lambda t: int(str(t).split('-')[-1])
@@ -61,24 +62,25 @@ class XYPaint:
             i = list(i)
             if i[0] < 0 and i[1] > 0 and mode == 1:
                 a = int(str(i[0]).split('-')[-1])#plus[i[0]]
-                data.append(([a*self.max+a-1, num[i[1]]]))
+                data.append(([a*self.max + a - 1, num[i[1]]]))
             elif i[0] > 0 and i[1] > 0 and mode == 2:
                 a = i[0]
-                data.append([a if a == 1 else a*self.max+a-self.max, num[i[1]]])
+                data.append([a if a == 1 else a*self.max + a - self.max, num[i[1]]])
             elif i[0] < 0 and i[1] < 0 and mode == 3:
                 i = [plus(i[0]), plus(i[1])]
-                data.append([i[0]*self.max+i[0]-self.max-1, num[i[1]]])
+                data.append([i[0]*self.max + i[0] - self.max - 1, num[i[1]]])
             elif i[0] > 0 and i[1] < 0 and mode == 4:
                 i[1] = plus(i[1])
-                data.append([i[0]*self.max+i[0]-1, num[i[1]]])
+                data.append([i[0]*self.max + i[0] - 1, num[i[1]]])
         return data
 
-    def paint_box_1(self):
+    @property
+    def paint_box_1(self) -> list:
         y = self.paint_y[0]
         parts = []
         data = self.filter_controls(1)
         lines = []
-        for i in range(len(self.line_rang) //2):
+        for i in range(len(self.line_rang) // 2):
             f = ''
             tap = " "
             for t in range((len(self.line_rang) - 1)*(self.max + 1) // 2)[::-1]:
@@ -92,13 +94,13 @@ class XYPaint:
             
         return parts
 
-
-    def paint_box_2(self):
+    @property
+    def paint_box_2(self) -> list:
         parts = []
         data = self.filter_controls(2)
         #print(data)
         lines = []
-        for i in range(len(self.line_rang) //2):
+        for i in range(len(self.line_rang) // 2):
             f = ''
             tap = ' '
             for t in range((len(self.line_rang) - 1)*(self.max + 1) // 2)[::-1]:
@@ -111,15 +113,15 @@ class XYPaint:
             parts.append(f[::-1])
         return parts
 
-
-    def paint_box_3(self):
+    @property
+    def paint_box_3(self) -> list:
         parts = []
         data = self.filter_controls(3)
         lines = []
-        for i in range(len(self.line_rang) //2):
+        for i in range(len(self.line_rang) // 2):
             f = ''
             tap = ' '
-            for t in range((len(self.line_rang) - 1)*(self.max + 1) // 2-self.max)[::-1]:
+            for t in range((len(self.line_rang) - 1)*(self.max + 1) // 2 - self.max)[::-1]:
                 if [t, i] in data:
                     f += C[2]
                     lines.append(t)
@@ -129,11 +131,12 @@ class XYPaint:
             parts.append(f)
         return parts[::-1]
         
-    def paint_box_4(self):
+    @property
+    def paint_box_4(self) -> list:
         parts = []
         data = self.filter_controls(4)
         lines = []
-        for i in range(len(self.line_rang) //2):
+        for i in range(len(self.line_rang) // 2):
             f = ''
             tap = ' '
             for t in range((len(self.line_rang) - 1)*(self.max + 1) // 2)[::-1]:
@@ -148,18 +151,29 @@ class XYPaint:
 
 
     def start(self):
-        output = ""
-        for a1, a2, a3 in zip(self.paint_box_1(), self.paint_y[0].split('\n'), self.paint_box_2()):
-            output += ('    '+a1+a2+a3) + "\n"
-            
-        output += (self.paint_x) + "\n"
-        
-        for a1, a2, a3 in zip(self.paint_box_3(), self.paint_y[1].split('\n'), self.paint_box_4()):
-            output += ('    ' + a1+a2+a3)+'\n'
-            
+        axis_x = self.paint_y
+        output = '\n'.join(
+            map(
+                lambda t: '    ' + ''.join(t),
+                zip(
+                    self.paint_box_1,
+                    axis_x[0].split('\n'),
+                    self.paint_box_2
+                )
+            )
+        ) + "\n" + (self.paint_x) + "\n"
+        output += '\n'.join(
+            map(
+                lambda t: '    ' + ''.join(t),
+                zip(
+                    self.paint_box_3,
+                    axis_x[1].split('\n'),
+                    self.paint_box_4
+                )
+            )
+        ) + "\n"
         tap = ' '*(len(output.split('\n')[0])//2+1)
-        output = f"{tap}⋏\n{tap}{C[0]}\n{output}{tap}{C[0]}\n{tap}⋎"
-        output = output.replace('-', "[red]-[/red]")
+        output = f"{tap}⋏\n{tap}{C[0]}\n{output}{tap}{C[0]}\n{tap}⋎".replace('-', "[red]-[/red]")
         
         console.print(output)
         
@@ -173,5 +187,5 @@ if __name__ == "__main__":
         paint = XYPaint(range(int(argv[-3]), int(argv[-2])), argv[-1])
         paint.start()
     except Exception as e:
-        print(console.print(f'[red]{e.__class__.__name__}: {e}'))
-        print('example:\n  test -2 3 s**3\n  !"s" is range(-2, 3)')
+        console.print(f'[red]{e.__class__.__name__}[/red]: {e}')
+        console.print('example:\n  test -2 3 s**3\n  !"s" is range(-2, 3)')
