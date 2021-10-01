@@ -19,7 +19,7 @@ class XYPaint:
     def __init__(self, rang: range, text: str):
         self.controls = list(map(lambda i: (i, round(eval(text.replace("s", f"({i})")))), rang))
         console.print(str(self.controls)[1:-1].replace('),', ")\n\r").replace(" (", "(").replace('-', '[red]-[/red]'))
-        __max = max([int(str(min(map(min, self.controls))).split('-', 1)[1]), max(map(max, self.controls))])
+        __max = max([int(str(min(map(min, self.controls))).split('-', 1)[-1]), max(map(max, self.controls))])
         self.line_rang = range(-__max, __max + 1)
         self.max = max(len(str(i)) for i in self.line_rang) 
         
